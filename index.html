@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>개인용 기사 타자 연습기</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --good: #16a34a;
+      --bad: #dc2626;
+      --field: #ffffff;
+      --soft: #f9fafb;
+      --blue-soft: #eff6ff;
+      --current: #dbeafe;
+      --notice-bg: #fffbeb;
+      --notice-line: #fde68a;
+      --notice-text: #92400e;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    body.dark {
+      --bg: #0b1020;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: #243041;
+      --primary: #60a5fa;
+      --primary-dark: #3b82f6;
+      --good: #4ade80;
+      --bad: #f87171;
+      --field: #0f172a;
+      --soft: #0f172a;
+      --blue-soft: rgba(37, 99, 235, 0.18);
+      --current: rgba(96, 165, 250, 0.28);
+      --notice-bg: rgba(245, 158, 11, 0.12);
+      --notice-line: rgba(245, 158, 11, 0.35);
+      --notice-text: #fcd34d;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    header { padding: 40px 20px 22px; text-align: center; }
+    header h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: -0.04em; }
+    header p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 48px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+    }
+
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .panel { padding: 18px; }
+    .panel h2 { margin: 0 0 14px; font-size: 18px; letter-spacing: -0.03em; }
+
+    label { display: block; margin: 12px 0 6px; font-size: 13px; font-weight: 700; color: var(--text); }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font: inherit;
+      color: var(--text);
+      background: var(--field);
+      outline: none;
+    }
+
+    textarea { min-height: 160px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      color: white;
+      background: var(--primary);
+      transition: 0.15s ease;
+    }
+
+    button:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    button.secondary { color: var(--text); background: var(--blue-soft); }
+    button.secondary:hover { background: rgba(96, 165, 250, 0.24); }
+    button.danger { background: rgba(220, 38, 38, 0.14); color: var(--bad); }
+    button.danger:hover { background: rgba(220, 38, 38, 0.24); }
+    button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    button.ghost:hover { background: var(--soft); color: var(--text); }
+
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+    .article-list { display: grid; gap: 8px; margin-top: 14px; max-height: 360px; overflow: auto; padding-right: 4px; }
+    .article-item { border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: var(--field); cursor: pointer; }
+    .article-item.active { border-color: var(--primary); background: var(--blue-soft); }
+    .article-title { font-weight: 800; font-size: 14px; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .article-meta { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .practice { padding: 22px; min-height: 720px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 16px; }
+    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .current-title { margin: 0 0 6px; font-size: 24px; letter-spacing: -0.04em; }
+    .current-url a { color: var(--primary); font-size: 13px; text-decoration: none; word-break: break-all; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .stat { border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: var(--soft); }
+    .stat small { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .stat strong { font-size: 22px; letter-spacing: -0.03em; }
+
+    .typing-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      background: var(--soft);
+      overflow: auto;
+      min-height: 310px;
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.9;
+      letter-spacing: -0.01em;
+      word-break: keep-all;
+    }
+
+    .char { border-radius: 4px; padding: 0 1px; }
+    .char.correct { color: var(--good); background: rgba(22, 163, 74, 0.08); }
+    .char.incorrect { color: white; background: var(--bad); }
+    .char.current { background: var(--current); outline: 2px solid rgba(37, 99, 235, 0.35); }
+    .char.skipped { color: var(--muted); background: transparent; opacity: 0.62; }
+
+    .input-area { display: grid; gap: 10px; }
+    #typingInput { min-height: 92px; font-size: 18px; line-height: 1.7; }
+    .help { color: var(--muted); font-size: 12px; margin-top: 8px; }
+    .notice { padding: 12px; border-radius: 14px; background: var(--notice-bg); border: 1px solid var(--notice-line); color: var(--notice-text); font-size: 13px; }
+    .empty { padding: 24px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); text-align: center; }
+
+    @media (max-width: 900px) {
+      .wrap { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .topbar { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>개인용 기사 타자 연습기</h1>
+    <p>기사 URL을 관리하고, 본문은 직접 붙여넣어 브라우저에만 저장합니다.</p>
+  </header>
+
+  <main class="wrap">
+    <aside class="card panel">
+      <h2>기사 등록</h2>
+
+      <div class="notice">
+        기사 본문은 자동 수집하지 않습니다. 원문에서 직접 복사한 텍스트를 개인 연습용으로 브라우저에만 저장합니다.<br />
+        숫자와 주요 단위는 입력하지 않아도 자동으로 통과됩니다.
+      </div>
+
+      <label for="articleTitle">기사 제목</label>
+      <input id="articleTitle" type="text" placeholder="예: 신약 허가 관련 기사" />
+
+      <label for="articleUrl">기사 URL</label>
+      <input id="articleUrl" type="url" placeholder="https://www.monews.co.kr/..." />
+
+      <label for="articleBody">본문 붙여넣기</label>
+      <textarea id="articleBody" placeholder="원문 기사에서 연습할 문단만 복사해 붙여넣으세요."></textarea>
+
+      <div class="btn-row">
+        <button id="saveBtn">저장</button>
+        <button id="clearFormBtn" class="secondary">입력 초기화</button>
+      </div>
+
+      <p class="help">저장 데이터는 현재 브라우저의 localStorage에만 남습니다.</p>
+
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0;" />
+
+      <h2>저장한 기사</h2>
+      <input id="searchInput" type="text" placeholder="제목 또는 URL 검색" />
+      <div id="articleList" class="article-list"></div>
+
+      <div class="btn-row">
+        <button id="exportBtn" class="ghost">백업 JSON</button>
+        <button id="importBtn" class="ghost">JSON 불러오기</button>
+        <input id="importFile" type="file" accept="application/json" hidden />
+      </div>
+    </aside>
+
+    <section class="card practice">
+      <div class="topbar">
+        <div>
+          <h2 id="currentTitle" class="current-title">연습할 기사를 선택하세요</h2>
+          <div id="currentUrl" class="current-url"></div>
+        </div>
+        <div class="btn-row" style="margin-top:0;">
+          <button id="resetBtn" class="secondary">연습 리셋</button>
+          <button id="themeBtn" class="ghost">블랙 모드</button>
+          <button id="deleteBtn" class="danger">기사 삭제</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><small>진행률</small><strong id="progressStat">0%</strong></div>
+        <div class="stat"><small>정확도</small><strong id="accuracyStat">0%</strong></div>
+        <div class="stat"><small>분당 타수</small><strong id="cpmStat">0</strong></div>
+        <div class="stat"><small>오타</small><strong id="errorStat">0</strong></div>
+      </div>
+
+      <div id="typingText" class="typing-box">
+        <div class="empty">왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.</div>
+      </div>
+
+      <div class="input-area">
+        <textarea id="typingInput" placeholder="여기에 위 문장을 그대로 타이핑하세요." disabled></textarea>
+        <div class="btn-row">
+          <button id="startBtn">시작 / 이어하기</button>
+          <button id="finishBtn" class="secondary">완료 처리</button>
+        </div>
+        <p class="help">첫 입력 시 시간이 측정됩니다. 새로고침해도 선택한 기사와 연습 위치는 유지됩니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "personal_article_typing_articles_v1";
+    const STATE_KEY = "personal_article_typing_state_v1";
+    const THEME_KEY = "personal_article_typing_theme_v1";
+
+    let articles = loadArticles();
+    let selectedId = loadState().selectedId || null;
+    let startedAt = loadState().startedAt || null;
+    let typedValue = loadState().typedValue || "";
+    let practiceIndex = loadState().practiceIndex || 0;
+    let currentTheme = localStorage.getItem(THEME_KEY) || "light";
+
+    const $ = (id) => document.getElementById(id);
+
+    const els = {
+      title: $("articleTitle"),
+      url: $("articleUrl"),
+      body: $("articleBody"),
+      save: $("saveBtn"),
+      clearForm: $("clearFormBtn"),
+      list: $("articleList"),
+      search: $("searchInput"),
+      currentTitle: $("currentTitle"),
+      currentUrl: $("currentUrl"),
+      typingText: $("typingText"),
+      typingInput: $("typingInput"),
+      start: $("startBtn"),
+      reset: $("resetBtn"),
+      finish: $("finishBtn"),
+      delete: $("deleteBtn"),
+      theme: $("themeBtn"),
+      progress: $("progressStat"),
+      accuracy: $("accuracyStat"),
+      cpm: $("cpmStat"),
+      error: $("errorStat"),
+      export: $("exportBtn"),
+      import: $("importBtn"),
+      importFile: $("importFile")
+    };
+
+    function loadArticles() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveArticles() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
+    }
+
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem(STATE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STATE_KEY, JSON.stringify({ selectedId, startedAt, typedValue, practiceIndex }));
+    }
+
+    function applyTheme() {
+      document.body.classList.toggle("dark", currentTheme === "dark");
+      els.theme.textContent = currentTheme === "dark" ? "라이트 모드" : "블랙 모드";
+      localStorage.setItem(THEME_KEY, currentTheme);
+    }
+
+    function toggleTheme() {
+      currentTheme = currentTheme === "dark" ? "light" : "dark";
+      applyTheme();
+    }
+
+    function normalizeText(text) {
+      return text
+        .replace(/\r\n/g, "\n")
+        .replace(/[ \t]+/g, " ")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
+    function makeId() {
+      return `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    }
+
+    function getSelectedArticle() {
+      return articles.find(article => article.id === selectedId) || null;
+    }
+
+    function isSkippableChar(char) {
+      return /[0-9０-９]/.test(char) || /[.,%％℃°㎎㎖㎍㎏㎜㎝㎡㎥]/.test(char);
+    }
+
+    function findNextTypableIndex(text, startIndex) {
+      const chars = Array.from(text);
+      let i = startIndex;
+      while (i < chars.length && isSkippableChar(chars[i])) i += 1;
+      return i;
+    }
+
+    function buildTypedDisplayValue(text, typed, nextIndex) {
+      const chars = Array.from(text);
+      const typedChars = Array.from(typed);
+      const result = [];
+      let typedCursor = 0;
+
+      for (let i = 0; i < Math.min(nextIndex, chars.length); i++) {
+        if (isSkippableChar(chars[i])) result.push(chars[i]);
+        else result.push(typedChars[typedCursor++] || chars[i]);
+      }
+
+      return result.join("");
+    }
+
+    function convertRawInputToPractice(rawInput, text, previousTyped, previousIndex) {
+      const chars = Array.from(text);
+      const prevDisplay = buildTypedDisplayValue(text, previousTyped, previousIndex);
+
+      if (rawInput.length < prevDisplay.length) {
+        let targetIndex = previousIndex;
+        while (targetIndex > 0 && isSkippableChar(chars[targetIndex - 1])) targetIndex -= 1;
+        if (targetIndex > 0) targetIndex -= 1;
+
+        const targetTypedLength = chars.slice(0, targetIndex).filter(char => !isSkippableChar(char)).length;
+        const newTyped = Array.from(previousTyped).slice(0, Math.max(0, targetTypedLength)).join("");
+        return { typed: newTyped, index: findNextTypableIndex(text, targetIndex) };
+      }
+
+      const added = Array.from(rawInput.slice(prevDisplay.length));
+      let typedChars = Array.from(previousTyped);
+      let index = previousIndex;
+
+      added.forEach(char => {
+        index = findNextTypableIndex(text, index);
+        if (index >= chars.length) return;
+        typedChars.push(char);
+        index += 1;
+        index = findNextTypableIndex(text, index);
+      });
+
+      return { typed: typedChars.join(""), index };
+    }
+
+    function getPracticeStats(article) {
+      const targetChars = Array.from(article.body).filter(char => !isSkippableChar(char));
+      const typedChars = Array.from(typedValue);
+      let correct = 0;
+      let errors = 0;
+
+      typedChars.forEach((char, i) => {
+        if (char === targetChars[i]) correct += 1;
+        else errors += 1;
+      });
+
+      return { targetChars, typedChars, correct, errors };
+    }
+
+    function renderList() {
+      const q = els.search.value.trim().toLowerCase();
+      const filtered = articles.filter(article => {
+        return article.title.toLowerCase().includes(q) || article.url.toLowerCase().includes(q);
+      });
+
+      if (filtered.length === 0) {
+        els.list.innerHTML = `<div class="empty">저장한 기사가 없습니다.</div>`;
+        return;
+      }
+
+      els.list.innerHTML = filtered.map(article => `
+        <div class="article-item ${article.id === selectedId ? "active" : ""}" data-id="${article.id}">
+          <div class="article-title">${escapeHtml(article.title)}</div>
+          <div class="article-meta">${escapeHtml(article.url || "URL 없음")}</div>
+          <div class="article-meta">${new Date(article.createdAt).toLocaleString("ko-KR")}</div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll(".article-item").forEach(item => {
+        item.addEventListener("click", () => selectArticle(item.dataset.id));
+      });
+    }
+
+    function renderPractice() {
+      const article = getSelectedArticle();
+
+      if (!article) {
+        els.currentTitle.textContent = "연습할 기사를 선택하세요";
+        els.currentUrl.innerHTML = "";
+        els.typingText.innerHTML = `<div class="empty">왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.</div>`;
+        els.typingInput.value = "";
+        els.typingInput.disabled = true;
+        updateStats();
+        return;
+      }
+
+      practiceIndex = findNextTypableIndex(article.body, practiceIndex);
+      els.currentTitle.textContent = article.title;
+      els.currentUrl.innerHTML = article.url ? `<a href="${escapeAttr(article.url)}" target="_blank" rel="noopener noreferrer">원문 열기</a>` : "";
+      els.typingInput.disabled = false;
+      els.typingInput.value = buildTypedDisplayValue(article.body, typedValue, practiceIndex);
+      renderTypingText(article.body, typedValue, practiceIndex);
+      updateStats();
+    }
+
+    function renderTypingText(text, typed, nextIndex) {
+      const chars = Array.from(text);
+      const typedChars = Array.from(typed);
+      let typedCursor = 0;
+
+      els.typingText.innerHTML = chars.map((char, i) => {
+        let cls = "char";
+        let display = char;
+
+        if (isSkippableChar(char)) {
+          cls += " skipped";
+          if (i < nextIndex) cls += " correct";
+        } else if (i < nextIndex) {
+          const inputChar = typedChars[typedCursor++];
+          cls += inputChar === char ? " correct" : " incorrect";
+          if (inputChar) display = inputChar;
+        }
+
+        if (i === nextIndex) cls += " current";
+        const safeDisplay = display === "\n" ? "<br>" : escapeHtml(display);
+        return `<span class="${cls}">${safeDisplay}</span>`;
+      }).join("");
+
+      const current = els.typingText.querySelector(".current");
+      if (current) current.scrollIntoView({ block: "center", inline: "nearest" });
+    }
+
+    function updateStats() {
+      const article = getSelectedArticle();
+      if (!article) {
+        els.progress.textContent = "0%";
+        els.accuracy.textContent = "0%";
+        els.cpm.textContent = "0";
+        els.error.textContent = "0";
+        return;
+      }
+
+      const { targetChars, typedChars, correct, errors } = getPracticeStats(article);
+      const total = targetChars.length || 1;
+      const typed = typedChars;
+      const progress = Math.min(100, Math.round((typed.length / total) * 100));
+      const accuracy = typed.length ? Math.round((correct / typed.length) * 100) : 0;
+      const elapsedMinutes = startedAt ? Math.max((Date.now() - startedAt) / 60000, 1 / 60) : 0;
+      const cpm = elapsedMinutes ? Math.round(typed.length / elapsedMinutes) : 0;
+
+      els.progress.textContent = `${progress}%`;
+      els.accuracy.textContent = `${accuracy}%`;
+      els.cpm.textContent = String(cpm);
+      els.error.textContent = String(errors);
+    }
+
+    function selectArticle(id) {
+      selectedId = id;
+      const article = getSelectedArticle();
+      const savedState = loadState();
+
+      if (savedState.selectedId === id) {
+        typedValue = savedState.typedValue || "";
+        practiceIndex = savedState.practiceIndex || 0;
+        startedAt = savedState.startedAt || null;
+      } else {
+        typedValue = "";
+        practiceIndex = 0;
+        startedAt = null;
+      }
+
+      if (article) practiceIndex = findNextTypableIndex(article.body, practiceIndex);
+      saveState();
+      renderList();
+      renderPractice();
+      if (article) els.typingInput.focus();
+    }
+
+    function saveArticleFromForm() {
+      const title = els.title.value.trim();
+      const url = els.url.value.trim();
+      const body = normalizeText(els.body.value);
+
+      if (!title) return alert("기사 제목을 입력하세요.");
+      if (!body) return alert("연습할 본문을 붙여넣으세요.");
+      if (url && !/^https?:\/\//i.test(url)) return alert("URL은 http:// 또는 https://로 시작해야 합니다.");
+
+      const article = {
+        id: makeId(),
+        title,
+        url,
+        body,
+        createdAt: new Date().toISOString()
+      };
+
+      articles.unshift(article);
+      selectedId = article.id;
+      typedValue = "";
+      practiceIndex = 0;
+      startedAt = null;
+      saveArticles();
+      saveState();
+      clearForm();
+      renderList();
+      renderPractice();
+    }
+
+    function clearForm() {
+      els.title.value = "";
+      els.url.value = "";
+      els.body.value = "";
+    }
+
+    function resetPractice() {
+      typedValue = "";
+      practiceIndex = 0;
+      startedAt = null;
+      const article = getSelectedArticle();
+      if (article) practiceIndex = findNextTypableIndex(article.body, 0);
+      saveState();
+      renderPractice();
+      els.typingInput.focus();
+    }
+
+    function deleteSelectedArticle() {
+      const article = getSelectedArticle();
+      if (!article) return;
+      if (!confirm("선택한 기사를 삭제할까요?")) return;
+
+      articles = articles.filter(item => item.id !== selectedId);
+      selectedId = articles[0]?.id || null;
+      typedValue = "";
+      practiceIndex = 0;
+      startedAt = null;
+      saveArticles();
+      saveState();
+      renderList();
+      renderPractice();
+    }
+
+    function finishPractice() {
+      const article = getSelectedArticle();
+      if (!article) return;
+      typedValue = Array.from(article.body).filter(char => !isSkippableChar(char)).join("");
+      practiceIndex = Array.from(article.body).length;
+      saveState();
+      renderPractice();
+    }
+
+    function exportData() {
+      const data = {
+        exportedAt: new Date().toISOString(),
+        articles
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "typing-practice-backup.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          const imported = Array.isArray(data) ? data : data.articles;
+          if (!Array.isArray(imported)) throw new Error("Invalid format");
+
+          const cleaned = imported
+            .filter(item => item.title && item.body)
+            .map(item => ({
+              id: item.id || makeId(),
+              title: String(item.title),
+              url: String(item.url || ""),
+              body: normalizeText(String(item.body)),
+              createdAt: item.createdAt || new Date().toISOString()
+            }));
+
+          articles = [...cleaned, ...articles];
+          saveArticles();
+          renderList();
+          alert(`${cleaned.length}개 기사를 불러왔습니다.`);
+        } catch {
+          alert("JSON 파일 형식을 확인하세요.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, "&#096;");
+    }
+
+    els.save.addEventListener("click", saveArticleFromForm);
+    els.clearForm.addEventListener("click", clearForm);
+    els.search.addEventListener("input", renderList);
+
+    els.typingInput.addEventListener("input", () => {
+      const article = getSelectedArticle();
+      if (!article) return;
+      if (!startedAt && els.typingInput.value.length > 0) startedAt = Date.now();
+
+      const next = convertRawInputToPractice(els.typingInput.value, article.body, typedValue, practiceIndex);
+      typedValue = next.typed;
+      practiceIndex = next.index;
+
+      const displayValue = buildTypedDisplayValue(article.body, typedValue, practiceIndex);
+      if (els.typingInput.value !== displayValue) els.typingInput.value = displayValue;
+
+      renderTypingText(article.body, typedValue, practiceIndex);
+      updateStats();
+      saveState();
+    });
+
+    els.start.addEventListener("click", () => {
+      if (!getSelectedArticle()) return alert("먼저 기사를 선택하세요.");
+      els.typingInput.disabled = false;
+      els.typingInput.focus();
+    });
+
+    els.reset.addEventListener("click", resetPractice);
+    els.delete.addEventListener("click", deleteSelectedArticle);
+    els.finish.addEventListener("click", finishPractice);
+    els.theme.addEventListener("click", toggleTheme);
+    els.export.addEventListener("click", exportData);
+    els.import.addEventListener("click", () => els.importFile.click());
+    els.importFile.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) importData(file);
+      e.target.value = "";
+    });
+
+    applyTheme();
+    const initialArticle = getSelectedArticle();
+    if (initialArticle) practiceIndex = findNextTypableIndex(initialArticle.body, practiceIndex);
+    renderList();
+    renderPractice();
+  </script>
+</body>
+</html>
