@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>개인용 기사 타자 연습기</title>
+  <title>medical healthcare article summary</title>
   <style>
     :root {
       --bg: #f5f7fb;
@@ -60,6 +60,14 @@
     header { padding: 40px 20px 22px; text-align: center; }
     header h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: -0.04em; }
     header p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .header-actions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
 
     .wrap {
       width: min(1180px, calc(100% - 32px));
@@ -161,26 +169,29 @@
 </head>
 <body>
   <header>
-    <h1>개인용 기사 타자 연습기</h1>
-    <p>기사 URL을 관리하고, 본문은 직접 붙여넣어 브라우저에만 저장합니다.</p>
+    <h1 id="appTitle">medical healthcare article summary</h1>
+    <p id="appSubtitle">기사 URL을 관리하고, 본문은 직접 붙여넣어 브라우저에만 저장합니다.</p>
+    <div class="header-actions">
+      <button id="languageBtn" class="ghost">English</button>
+    </div>
   </header>
 
   <main class="wrap">
     <aside class="card panel">
-      <h2>기사 등록</h2>
+      <h2 id="registerTitle">기사 등록</h2>
 
-      <div class="notice">
+      <div id="noticeText" class="notice">
         기사 본문은 자동 수집하지 않습니다. 원문에서 직접 복사한 텍스트를 개인 연습용으로 브라우저에만 저장합니다.<br />
         숫자와 주요 단위는 입력하지 않아도 자동으로 통과됩니다.
       </div>
 
-      <label for="articleTitle">기사 제목</label>
+      <label id="articleTitleLabel" for="articleTitle">기사 제목</label>
       <input id="articleTitle" type="text" placeholder="예: 신약 허가 관련 기사" />
 
-      <label for="articleUrl">기사 URL</label>
+      <label id="articleUrlLabel" for="articleUrl">기사 URL</label>
       <input id="articleUrl" type="url" placeholder="https://www.monews.co.kr/..." />
 
-      <label for="articleBody">본문 붙여넣기</label>
+      <label id="articleBodyLabel" for="articleBody">본문 붙여넣기</label>
       <textarea id="articleBody" placeholder="원문 기사에서 연습할 문단만 복사해 붙여넣으세요."></textarea>
 
       <div class="btn-row">
@@ -188,11 +199,11 @@
         <button id="clearFormBtn" class="secondary">입력 초기화</button>
       </div>
 
-      <p class="help">저장 데이터는 현재 브라우저의 localStorage에만 남습니다.</p>
+      <p id="storageHelp" class="help">저장 데이터는 현재 브라우저의 localStorage에만 남습니다.</p>
 
       <hr style="border:0;border-top:1px solid var(--line);margin:20px 0;" />
 
-      <h2>저장한 기사</h2>
+      <h2 id="savedTitle">저장한 기사</h2>
       <input id="searchInput" type="text" placeholder="제목 또는 URL 검색" />
       <div id="articleList" class="article-list"></div>
 
@@ -217,10 +228,10 @@
       </div>
 
       <div class="stats">
-        <div class="stat"><small>진행률</small><strong id="progressStat">0%</strong></div>
-        <div class="stat"><small>정확도</small><strong id="accuracyStat">0%</strong></div>
-        <div class="stat"><small>분당 타수</small><strong id="cpmStat">0</strong></div>
-        <div class="stat"><small>오타</small><strong id="errorStat">0</strong></div>
+        <div class="stat"><small id="progressLabel">진행률</small><strong id="progressStat">0%</strong></div>
+        <div class="stat"><small id="accuracyLabel">정확도</small><strong id="accuracyStat">0%</strong></div>
+        <div class="stat"><small id="cpmLabel">분당 타수</small><strong id="cpmStat">0</strong></div>
+        <div class="stat"><small id="errorLabel">오타</small><strong id="errorStat">0</strong></div>
       </div>
 
       <div id="typingText" class="typing-box">
@@ -233,7 +244,7 @@
           <button id="startBtn">시작 / 이어하기</button>
           <button id="finishBtn" class="secondary">완료 처리</button>
         </div>
-        <p class="help">첫 입력 시 시간이 측정됩니다. 새로고침해도 선택한 기사와 연습 위치는 유지됩니다.</p>
+        <p id="practiceHelp" class="help">첫 입력 시 시간이 측정됩니다. 새로고침해도 선택한 기사와 연습 위치는 유지됩니다.</p>
       </div>
     </section>
   </main>
@@ -242,6 +253,98 @@
     const STORAGE_KEY = "personal_article_typing_articles_v1";
     const STATE_KEY = "personal_article_typing_state_v1";
     const THEME_KEY = "personal_article_typing_theme_v1";
+    const LANGUAGE_KEY = "medical_healthcare_article_summary_language_v1";
+
+    const i18n = {
+      ko: {
+        appTitle: "medical healthcare article summary",
+        appSubtitle: "기사 URL을 관리하고, 본문은 직접 붙여넣어 브라우저에만 저장합니다.",
+        languageBtn: "English",
+        registerTitle: "기사 등록",
+        noticeText: "기사 본문은 자동 수집하지 않습니다. 원문에서 직접 복사한 텍스트를 개인 연습용으로 브라우저에만 저장합니다.<br />숫자와 주요 단위는 입력하지 않아도 자동으로 통과됩니다.",
+        articleTitleLabel: "기사 제목",
+        articleTitlePlaceholder: "예: 신약 허가 관련 기사",
+        articleUrlLabel: "기사 URL",
+        articleUrlPlaceholder: "https://www.monews.co.kr/...",
+        articleBodyLabel: "본문 붙여넣기",
+        articleBodyPlaceholder: "원문 기사에서 연습할 문단만 복사해 붙여넣으세요.",
+        saveBtn: "저장",
+        clearFormBtn: "입력 초기화",
+        storageHelp: "저장 데이터는 현재 브라우저의 localStorage에만 남습니다.",
+        savedTitle: "저장한 기사",
+        searchPlaceholder: "제목 또는 URL 검색",
+        exportBtn: "백업 JSON",
+        importBtn: "JSON 불러오기",
+        selectArticle: "연습할 기사를 선택하세요",
+        emptyList: "저장한 기사가 없습니다.",
+        emptyPractice: "왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.",
+        openOriginal: "원문 열기",
+        resetBtn: "연습 리셋",
+        darkMode: "블랙 모드",
+        lightMode: "라이트 모드",
+        deleteBtn: "기사 삭제",
+        progressLabel: "진행률",
+        accuracyLabel: "정확도",
+        cpmLabel: "분당 타수",
+        errorLabel: "오타",
+        typingPlaceholder: "여기에 위 문장을 그대로 타이핑하세요.",
+        startBtn: "시작 / 이어하기",
+        finishBtn: "완료 처리",
+        practiceHelp: "첫 입력 시 시간이 측정됩니다. 새로고침해도 선택한 기사와 연습 위치는 유지됩니다.",
+        noUrl: "URL 없음",
+        titleRequired: "기사 제목을 입력하세요.",
+        bodyRequired: "연습할 본문을 붙여넣으세요.",
+        invalidUrl: "URL은 http:// 또는 https://로 시작해야 합니다.",
+        chooseArticle: "먼저 기사를 선택하세요.",
+        deleteConfirm: "선택한 기사를 삭제할까요?",
+        importSuccess: "개 기사를 불러왔습니다.",
+        importError: "JSON 파일 형식을 확인하세요."
+      },
+      en: {
+        appTitle: "medical healthcare article summary",
+        appSubtitle: "Manage article URLs and paste article text manually. Everything stays in your browser.",
+        languageBtn: "한국어",
+        registerTitle: "Add Article",
+        noticeText: "This app does not automatically collect article content. Paste copied text manually for personal practice only.<br />Numbers and common units are skipped automatically while typing.",
+        articleTitleLabel: "Article Title",
+        articleTitlePlaceholder: "Example: New drug approval article",
+        articleUrlLabel: "Article URL",
+        articleUrlPlaceholder: "https://www.monews.co.kr/...",
+        articleBodyLabel: "Paste Article Text",
+        articleBodyPlaceholder: "Paste only the paragraphs you want to practice typing.",
+        saveBtn: "Save",
+        clearFormBtn: "Clear Form",
+        storageHelp: "Saved data remains only in this browser's localStorage.",
+        savedTitle: "Saved Articles",
+        searchPlaceholder: "Search title or URL",
+        exportBtn: "Backup JSON",
+        importBtn: "Import JSON",
+        selectArticle: "Select an article to practice",
+        emptyList: "No saved articles yet.",
+        emptyPractice: "Add an article on the left or select a saved article to start practicing.",
+        openOriginal: "Open original article",
+        resetBtn: "Reset Practice",
+        darkMode: "Dark Mode",
+        lightMode: "Light Mode",
+        deleteBtn: "Delete Article",
+        progressLabel: "Progress",
+        accuracyLabel: "Accuracy",
+        cpmLabel: "CPM",
+        errorLabel: "Errors",
+        typingPlaceholder: "Type the text above here.",
+        startBtn: "Start / Continue",
+        finishBtn: "Mark Complete",
+        practiceHelp: "Timing starts with your first input. Selected article and typing progress remain after refresh.",
+        noUrl: "No URL",
+        titleRequired: "Please enter an article title.",
+        bodyRequired: "Please paste text to practice.",
+        invalidUrl: "URL must start with http:// or https://.",
+        chooseArticle: "Please select an article first.",
+        deleteConfirm: "Delete the selected article?",
+        importSuccess: " article(s) imported.",
+        importError: "Please check the JSON file format."
+      }
+    };
 
     let articles = loadArticles();
     let selectedId = loadState().selectedId || null;
@@ -249,15 +352,27 @@
     let typedValue = loadState().typedValue || "";
     let practiceIndex = loadState().practiceIndex || 0;
     let currentTheme = localStorage.getItem(THEME_KEY) || "light";
+    let currentLanguage = localStorage.getItem(LANGUAGE_KEY) || "ko";
 
     const $ = (id) => document.getElementById(id);
+    const tr = (key) => i18n[currentLanguage][key] || i18n.ko[key] || key;
 
     const els = {
+      appTitle: $("appTitle"),
+      appSubtitle: $("appSubtitle"),
+      language: $("languageBtn"),
+      registerTitle: $("registerTitle"),
+      notice: $("noticeText"),
+      titleLabel: $("articleTitleLabel"),
+      urlLabel: $("articleUrlLabel"),
+      bodyLabel: $("articleBodyLabel"),
       title: $("articleTitle"),
       url: $("articleUrl"),
       body: $("articleBody"),
       save: $("saveBtn"),
       clearForm: $("clearFormBtn"),
+      storageHelp: $("storageHelp"),
+      savedTitle: $("savedTitle"),
       list: $("articleList"),
       search: $("searchInput"),
       currentTitle: $("currentTitle"),
@@ -269,6 +384,11 @@
       finish: $("finishBtn"),
       delete: $("deleteBtn"),
       theme: $("themeBtn"),
+      progressLabel: $("progressLabel"),
+      accuracyLabel: $("accuracyLabel"),
+      cpmLabel: $("cpmLabel"),
+      errorLabel: $("errorLabel"),
+      practiceHelp: $("practiceHelp"),
       progress: $("progressStat"),
       accuracy: $("accuracyStat"),
       cpm: $("cpmStat"),
@@ -279,11 +399,8 @@
     };
 
     function loadArticles() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+      catch { return []; }
     }
 
     function saveArticles() {
@@ -291,11 +408,8 @@
     }
 
     function loadState() {
-      try {
-        return JSON.parse(localStorage.getItem(STATE_KEY)) || {};
-      } catch {
-        return {};
-      }
+      try { return JSON.parse(localStorage.getItem(STATE_KEY)) || {}; }
+      catch { return {}; }
     }
 
     function saveState() {
@@ -304,7 +418,7 @@
 
     function applyTheme() {
       document.body.classList.toggle("dark", currentTheme === "dark");
-      els.theme.textContent = currentTheme === "dark" ? "라이트 모드" : "블랙 모드";
+      els.theme.textContent = currentTheme === "dark" ? tr("lightMode") : tr("darkMode");
       localStorage.setItem(THEME_KEY, currentTheme);
     }
 
@@ -313,12 +427,50 @@
       applyTheme();
     }
 
+    function applyLanguage() {
+      document.documentElement.lang = currentLanguage;
+      document.title = "medical healthcare article summary";
+      els.appTitle.textContent = tr("appTitle");
+      els.appSubtitle.textContent = tr("appSubtitle");
+      els.language.textContent = tr("languageBtn");
+      els.registerTitle.textContent = tr("registerTitle");
+      els.notice.innerHTML = tr("noticeText");
+      els.titleLabel.textContent = tr("articleTitleLabel");
+      els.urlLabel.textContent = tr("articleUrlLabel");
+      els.bodyLabel.textContent = tr("articleBodyLabel");
+      els.title.placeholder = tr("articleTitlePlaceholder");
+      els.url.placeholder = tr("articleUrlPlaceholder");
+      els.body.placeholder = tr("articleBodyPlaceholder");
+      els.save.textContent = tr("saveBtn");
+      els.clearForm.textContent = tr("clearFormBtn");
+      els.storageHelp.textContent = tr("storageHelp");
+      els.savedTitle.textContent = tr("savedTitle");
+      els.search.placeholder = tr("searchPlaceholder");
+      els.export.textContent = tr("exportBtn");
+      els.import.textContent = tr("importBtn");
+      els.reset.textContent = tr("resetBtn");
+      els.delete.textContent = tr("deleteBtn");
+      els.progressLabel.textContent = tr("progressLabel");
+      els.accuracyLabel.textContent = tr("accuracyLabel");
+      els.cpmLabel.textContent = tr("cpmLabel");
+      els.errorLabel.textContent = tr("errorLabel");
+      els.typingInput.placeholder = tr("typingPlaceholder");
+      els.start.textContent = tr("startBtn");
+      els.finish.textContent = tr("finishBtn");
+      els.practiceHelp.textContent = tr("practiceHelp");
+      localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+      applyTheme();
+      renderList();
+      renderPractice();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === "ko" ? "en" : "ko";
+      applyLanguage();
+    }
+
     function normalizeText(text) {
-      return text
-        .replace(/\r\n/g, "\n")
-        .replace(/[ \t]+/g, " ")
-        .replace(/\n{3,}/g, "\n\n")
-        .trim();
+      return text.replace(/\r\n/g, "\n").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
     }
 
     function makeId() {
@@ -345,33 +497,27 @@
       const typedChars = Array.from(typed);
       const result = [];
       let typedCursor = 0;
-
       for (let i = 0; i < Math.min(nextIndex, chars.length); i++) {
         if (isSkippableChar(chars[i])) result.push(chars[i]);
         else result.push(typedChars[typedCursor++] || chars[i]);
       }
-
       return result.join("");
     }
 
     function convertRawInputToPractice(rawInput, text, previousTyped, previousIndex) {
       const chars = Array.from(text);
       const prevDisplay = buildTypedDisplayValue(text, previousTyped, previousIndex);
-
       if (rawInput.length < prevDisplay.length) {
         let targetIndex = previousIndex;
         while (targetIndex > 0 && isSkippableChar(chars[targetIndex - 1])) targetIndex -= 1;
         if (targetIndex > 0) targetIndex -= 1;
-
         const targetTypedLength = chars.slice(0, targetIndex).filter(char => !isSkippableChar(char)).length;
         const newTyped = Array.from(previousTyped).slice(0, Math.max(0, targetTypedLength)).join("");
         return { typed: newTyped, index: findNextTypableIndex(text, targetIndex) };
       }
-
       const added = Array.from(rawInput.slice(prevDisplay.length));
       let typedChars = Array.from(previousTyped);
       let index = previousIndex;
-
       added.forEach(char => {
         index = findNextTypableIndex(text, index);
         if (index >= chars.length) return;
@@ -379,7 +525,6 @@
         index += 1;
         index = findNextTypableIndex(text, index);
       });
-
       return { typed: typedChars.join(""), index };
     }
 
@@ -388,55 +533,44 @@
       const typedChars = Array.from(typedValue);
       let correct = 0;
       let errors = 0;
-
       typedChars.forEach((char, i) => {
         if (char === targetChars[i]) correct += 1;
         else errors += 1;
       });
-
       return { targetChars, typedChars, correct, errors };
     }
 
     function renderList() {
       const q = els.search.value.trim().toLowerCase();
-      const filtered = articles.filter(article => {
-        return article.title.toLowerCase().includes(q) || article.url.toLowerCase().includes(q);
-      });
-
+      const filtered = articles.filter(article => article.title.toLowerCase().includes(q) || article.url.toLowerCase().includes(q));
       if (filtered.length === 0) {
-        els.list.innerHTML = `<div class="empty">저장한 기사가 없습니다.</div>`;
+        els.list.innerHTML = `<div class="empty">${tr("emptyList")}</div>`;
         return;
       }
-
       els.list.innerHTML = filtered.map(article => `
         <div class="article-item ${article.id === selectedId ? "active" : ""}" data-id="${article.id}">
           <div class="article-title">${escapeHtml(article.title)}</div>
-          <div class="article-meta">${escapeHtml(article.url || "URL 없음")}</div>
-          <div class="article-meta">${new Date(article.createdAt).toLocaleString("ko-KR")}</div>
+          <div class="article-meta">${escapeHtml(article.url || tr("noUrl"))}</div>
+          <div class="article-meta">${new Date(article.createdAt).toLocaleString(currentLanguage === "ko" ? "ko-KR" : "en-US")}</div>
         </div>
       `).join("");
-
-      document.querySelectorAll(".article-item").forEach(item => {
-        item.addEventListener("click", () => selectArticle(item.dataset.id));
-      });
+      document.querySelectorAll(".article-item").forEach(item => item.addEventListener("click", () => selectArticle(item.dataset.id)));
     }
 
     function renderPractice() {
       const article = getSelectedArticle();
-
       if (!article) {
-        els.currentTitle.textContent = "연습할 기사를 선택하세요";
+        els.currentTitle.textContent = tr("selectArticle");
         els.currentUrl.innerHTML = "";
-        els.typingText.innerHTML = `<div class="empty">왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.</div>`;
+        els.typingText.innerHTML = `<div class="empty">${tr("emptyPractice")}</div>`;
         els.typingInput.value = "";
         els.typingInput.disabled = true;
         updateStats();
         return;
       }
-
       practiceIndex = findNextTypableIndex(article.body, practiceIndex);
       els.currentTitle.textContent = article.title;
-      els.currentUrl.innerHTML = article.url ? `<a href="${escapeAttr(article.url)}" target="_blank" rel="noopener noreferrer">원문 열기</a>` : "";
+      els.currentUrl.innerHTML = article.url ? `<a href="${escapeAttr(article.url)}" target="_blank" rel="noopener noreferrer">${tr("openOriginal")}</a>` : "";
       els.typingInput.disabled = false;
       els.typingInput.value = buildTypedDisplayValue(article.body, typedValue, practiceIndex);
       renderTypingText(article.body, typedValue, practiceIndex);
@@ -447,11 +581,9 @@
       const chars = Array.from(text);
       const typedChars = Array.from(typed);
       let typedCursor = 0;
-
       els.typingText.innerHTML = chars.map((char, i) => {
         let cls = "char";
         let display = char;
-
         if (isSkippableChar(char)) {
           cls += " skipped";
           if (i < nextIndex) cls += " correct";
@@ -460,12 +592,10 @@
           cls += inputChar === char ? " correct" : " incorrect";
           if (inputChar) display = inputChar;
         }
-
         if (i === nextIndex) cls += " current";
         const safeDisplay = display === "\n" ? "<br>" : escapeHtml(display);
         return `<span class="${cls}">${safeDisplay}</span>`;
       }).join("");
-
       const current = els.typingText.querySelector(".current");
       if (current) current.scrollIntoView({ block: "center", inline: "nearest" });
     }
@@ -479,15 +609,12 @@
         els.error.textContent = "0";
         return;
       }
-
       const { targetChars, typedChars, correct, errors } = getPracticeStats(article);
       const total = targetChars.length || 1;
-      const typed = typedChars;
-      const progress = Math.min(100, Math.round((typed.length / total) * 100));
-      const accuracy = typed.length ? Math.round((correct / typed.length) * 100) : 0;
+      const progress = Math.min(100, Math.round((typedChars.length / total) * 100));
+      const accuracy = typedChars.length ? Math.round((correct / typedChars.length) * 100) : 0;
       const elapsedMinutes = startedAt ? Math.max((Date.now() - startedAt) / 60000, 1 / 60) : 0;
-      const cpm = elapsedMinutes ? Math.round(typed.length / elapsedMinutes) : 0;
-
+      const cpm = elapsedMinutes ? Math.round(typedChars.length / elapsedMinutes) : 0;
       els.progress.textContent = `${progress}%`;
       els.accuracy.textContent = `${accuracy}%`;
       els.cpm.textContent = String(cpm);
@@ -498,7 +625,6 @@
       selectedId = id;
       const article = getSelectedArticle();
       const savedState = loadState();
-
       if (savedState.selectedId === id) {
         typedValue = savedState.typedValue || "";
         practiceIndex = savedState.practiceIndex || 0;
@@ -508,7 +634,6 @@
         practiceIndex = 0;
         startedAt = null;
       }
-
       if (article) practiceIndex = findNextTypableIndex(article.body, practiceIndex);
       saveState();
       renderList();
@@ -520,19 +645,10 @@
       const title = els.title.value.trim();
       const url = els.url.value.trim();
       const body = normalizeText(els.body.value);
-
-      if (!title) return alert("기사 제목을 입력하세요.");
-      if (!body) return alert("연습할 본문을 붙여넣으세요.");
-      if (url && !/^https?:\/\//i.test(url)) return alert("URL은 http:// 또는 https://로 시작해야 합니다.");
-
-      const article = {
-        id: makeId(),
-        title,
-        url,
-        body,
-        createdAt: new Date().toISOString()
-      };
-
+      if (!title) return alert(tr("titleRequired"));
+      if (!body) return alert(tr("bodyRequired"));
+      if (url && !/^https?:\/\//i.test(url)) return alert(tr("invalidUrl"));
+      const article = { id: makeId(), title, url, body, createdAt: new Date().toISOString() };
       articles.unshift(article);
       selectedId = article.id;
       typedValue = "";
@@ -565,8 +681,7 @@
     function deleteSelectedArticle() {
       const article = getSelectedArticle();
       if (!article) return;
-      if (!confirm("선택한 기사를 삭제할까요?")) return;
-
+      if (!confirm(tr("deleteConfirm"))) return;
       articles = articles.filter(item => item.id !== selectedId);
       selectedId = articles[0]?.id || null;
       typedValue = "";
@@ -588,15 +703,12 @@
     }
 
     function exportData() {
-      const data = {
-        exportedAt: new Date().toISOString(),
-        articles
-      };
+      const data = { exportedAt: new Date().toISOString(), articles };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "typing-practice-backup.json";
+      a.download = "medical-healthcare-article-summary-backup.json";
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -608,35 +720,26 @@
           const data = JSON.parse(reader.result);
           const imported = Array.isArray(data) ? data : data.articles;
           if (!Array.isArray(imported)) throw new Error("Invalid format");
-
-          const cleaned = imported
-            .filter(item => item.title && item.body)
-            .map(item => ({
-              id: item.id || makeId(),
-              title: String(item.title),
-              url: String(item.url || ""),
-              body: normalizeText(String(item.body)),
-              createdAt: item.createdAt || new Date().toISOString()
-            }));
-
+          const cleaned = imported.filter(item => item.title && item.body).map(item => ({
+            id: item.id || makeId(),
+            title: String(item.title),
+            url: String(item.url || ""),
+            body: normalizeText(String(item.body)),
+            createdAt: item.createdAt || new Date().toISOString()
+          }));
           articles = [...cleaned, ...articles];
           saveArticles();
           renderList();
-          alert(`${cleaned.length}개 기사를 불러왔습니다.`);
+          alert(currentLanguage === "ko" ? `${cleaned.length}${tr("importSuccess")}` : `${cleaned.length}${tr("importSuccess")}`);
         } catch {
-          alert("JSON 파일 형식을 확인하세요.");
+          alert(tr("importError"));
         }
       };
       reader.readAsText(file);
     }
 
     function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
     function escapeAttr(value) {
@@ -646,26 +749,24 @@
     els.save.addEventListener("click", saveArticleFromForm);
     els.clearForm.addEventListener("click", clearForm);
     els.search.addEventListener("input", renderList);
+    els.language.addEventListener("click", toggleLanguage);
 
     els.typingInput.addEventListener("input", () => {
       const article = getSelectedArticle();
       if (!article) return;
       if (!startedAt && els.typingInput.value.length > 0) startedAt = Date.now();
-
       const next = convertRawInputToPractice(els.typingInput.value, article.body, typedValue, practiceIndex);
       typedValue = next.typed;
       practiceIndex = next.index;
-
       const displayValue = buildTypedDisplayValue(article.body, typedValue, practiceIndex);
       if (els.typingInput.value !== displayValue) els.typingInput.value = displayValue;
-
       renderTypingText(article.body, typedValue, practiceIndex);
       updateStats();
       saveState();
     });
 
     els.start.addEventListener("click", () => {
-      if (!getSelectedArticle()) return alert("먼저 기사를 선택하세요.");
+      if (!getSelectedArticle()) return alert(tr("chooseArticle"));
       els.typingInput.disabled = false;
       els.typingInput.focus();
     });
@@ -682,7 +783,7 @@
       e.target.value = "";
     });
 
-    applyTheme();
+    applyLanguage();
     const initialArticle = getSelectedArticle();
     if (initialArticle) practiceIndex = findNextTypableIndex(initialArticle.body, practiceIndex);
     renderList();
