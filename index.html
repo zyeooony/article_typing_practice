@@ -6,19 +6,20 @@
   <title>medical healthcare article summary</title>
   <style>
     :root {
-      --bg: #f5f7fb;
+      --app-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+      --bg: #f3f7fa;
       --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --line: #e5e7eb;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
+      --text: #1e2933;
+      --muted: #65758b;
+      --line: #dbe4ea;
+      --primary: #0f6b7a;
+      --primary-dark: #0b5562;
       --good: #16a34a;
       --bad: #dc2626;
       --field: #ffffff;
       --soft: #f9fafb;
-      --blue-soft: #eff6ff;
-      --current: #dbeafe;
+      --blue-soft: #e8f3f6;
+      --current: rgba(15, 107, 122, 0.10);
       --notice-bg: #fffbeb;
       --notice-line: #fde68a;
       --notice-text: #92400e;
@@ -32,14 +33,14 @@
       --text: #e5e7eb;
       --muted: #9ca3af;
       --line: #243041;
-      --primary: #60a5fa;
-      --primary-dark: #3b82f6;
+      --primary: #5dd4e8;
+      --primary-dark: #36b8cc;
       --good: #4ade80;
       --bad: #f87171;
       --field: #0f172a;
       --soft: #0f172a;
-      --blue-soft: rgba(37, 99, 235, 0.18);
-      --current: rgba(96, 165, 250, 0.28);
+      --blue-soft: rgba(93, 212, 232, 0.16);
+      --current: rgba(93, 212, 232, 0.18);
       --notice-bg: rgba(245, 158, 11, 0.12);
       --notice-line: rgba(245, 158, 11, 0.35);
       --notice-text: #fcd34d;
@@ -50,44 +51,102 @@
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+      font-family: var(--app-font);
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.48;
+      font-size: 14px;
       transition: background 0.2s ease, color 0.2s ease;
     }
 
-    header { padding: 40px 20px 22px; text-align: center; }
-    header h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 42px); letter-spacing: -0.04em; }
-    header p { margin: 0; color: var(--muted); font-size: 15px; }
+    header {
+      padding: 38px 20px 22px;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 3.4vw, 38px);
+      letter-spacing: -0.045em;
+      text-transform: lowercase;
+      font-weight: 900;
+    }
+
+    header h1::after {
+      content: "";
+      display: block;
+      width: 76px;
+      height: 3px;
+      margin: 14px auto 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
 
     .header-actions {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 8px;
+      margin-top: 18px;
       flex-wrap: wrap;
-      margin-top: 16px;
+    }
+
+    .font-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .font-control select {
+      width: auto;
+      min-width: 180px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
     }
 
     .wrap {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1220px, calc(100% - 32px));
       margin: 0 auto 48px;
       display: grid;
       grid-template-columns: 360px 1fr;
       gap: 18px;
     }
 
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
-    .panel { padding: 18px; }
-    .panel h2 { margin: 0 0 14px; font-size: 18px; letter-spacing: -0.03em; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
 
-    label { display: block; margin: 12px 0 6px; font-size: 13px; font-weight: 700; color: var(--text); }
+    .panel { padding: 18px; }
+    .panel h2 { margin: 0 0 12px; font-size: 15px; letter-spacing: -0.03em; }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
 
     input, textarea, select {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 11px 12px;
+      padding: 9px 11px;
       font: inherit;
       color: var(--text);
       background: var(--field);
@@ -95,12 +154,16 @@
     }
 
     textarea { min-height: 160px; resize: vertical; }
-    input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
 
     button {
       border: 0;
       border-radius: 12px;
-      padding: 11px 14px;
+      padding: 9px 12px;
       font: inherit;
       font-weight: 800;
       cursor: pointer;
@@ -117,53 +180,277 @@
     button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
     button.ghost:hover { background: var(--soft); color: var(--text); }
 
-    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-
-    .article-list { display: grid; gap: 8px; margin-top: 14px; max-height: 360px; overflow: auto; padding-right: 4px; }
-    .article-item { border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: var(--field); cursor: pointer; }
-    .article-item.active { border-color: var(--primary); background: var(--blue-soft); }
-    .article-title { font-weight: 800; font-size: 14px; letter-spacing: -0.02em; margin-bottom: 4px; }
-    .article-meta { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    .practice { padding: 22px; min-height: 720px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 16px; }
-    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-    .current-title { margin: 0 0 6px; font-size: 24px; letter-spacing: -0.04em; }
-    .current-url a { color: var(--primary); font-size: 13px; text-decoration: none; word-break: break-all; }
-
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .stat { border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: var(--soft); }
-    .stat small { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
-    .stat strong { font-size: 22px; letter-spacing: -0.03em; }
-
-    .typing-box {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 22px;
-      background: var(--soft);
-      overflow: auto;
-      min-height: 310px;
-      font-size: clamp(18px, 2vw, 24px);
-      line-height: 1.9;
-      letter-spacing: -0.01em;
-      word-break: keep-all;
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
-    .char { border-radius: 4px; padding: 0 1px; }
-    .char.correct { color: var(--good); background: rgba(22, 163, 74, 0.08); }
-    .char.incorrect { color: white; background: var(--bad); }
-    .char.current { background: var(--current); outline: 2px solid rgba(37, 99, 235, 0.35); }
-    .char.skipped { color: var(--muted); background: transparent; opacity: 0.62; }
+    .article-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 4px;
+    }
 
-    .input-area { display: grid; gap: 10px; }
-    #typingInput { min-height: 92px; font-size: 18px; line-height: 1.7; }
+    .article-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--field);
+      cursor: pointer;
+    }
+
+    .article-item.active {
+      border-color: var(--primary);
+      background: var(--blue-soft);
+    }
+
+    .article-title {
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .article-meta {
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .practice {
+      padding: 22px;
+      min-height: 720px;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 16px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .current-title {
+      margin: 0 0 6px;
+      font-size: 19px;
+      letter-spacing: -0.04em;
+    }
+
+    .current-url a {
+      color: var(--primary);
+      font-size: 13px;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--soft);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .stat small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .stat strong {
+      font-size: 15px;
+      letter-spacing: -0.03em;
+    }
+
+    .typing-stage {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--soft);
+      overflow: hidden;
+      min-height: 390px;
+      cursor: text;
+    }
+
+    .typing-stage.focused {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .typing-box {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      height: 100%;
+      min-height: 390px;
+      overflow: auto;
+      font-size: clamp(16px, 1.55vw, 22px);
+      line-height: 1.85;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+      white-space: pre-wrap;
+      user-select: none;
+    }
+
+    .inline-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      z-index: 3;
+      opacity: 0.01;
+      color: transparent;
+      background: transparent;
+      border: 0;
+      resize: none;
+      caret-color: transparent;
+      padding: 24px;
+      overflow: hidden;
+      font-size: 18px;
+      outline: none;
+    }
+
+    .char {
+      border-radius: 5px;
+      padding: 0 1px;
+      transition: background 0.05s ease, color 0.05s ease;
+    }
+
+    .char.correct {
+      color: var(--text);
+      background: transparent;
+    }
+
+    .char.incorrect {
+      color: white;
+      background: var(--bad);
+    }
+
+    .char.current {
+      position: relative;
+      background: transparent;
+      outline: none;
+    }
+
+    .char.current::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: 0.18em;
+      width: 2px;
+      height: 1.25em;
+      background: var(--primary);
+      animation: blinkCaret 1s step-end infinite;
+    }
+
+    .char.composing {
+      position: relative;
+      color: var(--text);
+      background: transparent;
+      outline: none;
+    }
+
+    .char.composing::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: 0.18em;
+      width: 2px;
+      height: 1.25em;
+      background: var(--primary);
+      animation: blinkCaret 1s step-end infinite;
+    }
+
+    .char.skipped {
+      color: var(--muted);
+      background: transparent;
+      opacity: 0.45;
+    }
+
+    @keyframes blinkCaret {
+      50% { opacity: 0; }
+    }
+
+    .practice-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     .help { color: var(--muted); font-size: 12px; margin-top: 8px; }
-    .notice { padding: 12px; border-radius: 14px; background: var(--notice-bg); border: 1px solid var(--notice-line); color: var(--notice-text); font-size: 13px; }
-    .empty { padding: 24px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); text-align: center; }
+
+    .notice {
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--notice-bg);
+      border: 1px solid var(--notice-line);
+      color: var(--notice-text);
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 24px;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+      user-select: none;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      max-height: 220px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .history-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 9px 11px;
+      background: var(--field);
+    }
+
+    .history-title {
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .history-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
 
     @media (max-width: 900px) {
       .wrap { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .topbar { display: block; }
+      .typing-box { min-height: 330px; font-size: 17px; padding: 20px; }
+      .typing-stage { min-height: 330px; }
     }
   </style>
 </head>
@@ -173,6 +460,16 @@
     <p id="appSubtitle">기사 URL을 관리하고, 본문은 직접 붙여넣어 브라우저에만 저장합니다.</p>
     <div class="header-actions">
       <button id="languageBtn" class="ghost">English</button>
+      <label class="font-control" for="fontSelect">
+        <span id="fontSelectLabel">서체</span>
+        <select id="fontSelect">
+          <option value="system">System Sans</option>
+          <option value="noto">Noto Sans KR</option>
+          <option value="pretendard">Pretendard Style</option>
+          <option value="serif">Academic Serif</option>
+          <option value="mono">Monospace</option>
+        </select>
+      </label>
     </div>
   </header>
 
@@ -182,14 +479,14 @@
 
       <div id="noticeText" class="notice">
         기사 본문은 자동 수집하지 않습니다. 원문에서 직접 복사한 텍스트를 개인 연습용으로 브라우저에만 저장합니다.<br />
-        숫자와 주요 단위는 입력하지 않아도 자동으로 통과됩니다.
+        숫자, 단위, 줄바꿈, 괄호·따옴표 등 특수문자는 입력하지 않아도 자동으로 통과됩니다. 띄어쓰기는 직접 입력합니다.
       </div>
-
-      <label id="articleTitleLabel" for="articleTitle">기사 제목</label>
-      <input id="articleTitle" type="text" placeholder="예: 신약 허가 관련 기사" />
 
       <label id="articleUrlLabel" for="articleUrl">기사 URL</label>
       <input id="articleUrl" type="url" placeholder="https://www.monews.co.kr/..." />
+
+      <label id="articleTitleLabel" for="articleTitle">기사 제목</label>
+      <input id="articleTitle" type="text" placeholder="선택 입력: 비워두면 URL 기준으로 자동 저장됩니다." />
 
       <label id="articleBodyLabel" for="articleBody">본문 붙여넣기</label>
       <textarea id="articleBody" placeholder="원문 기사에서 연습할 문단만 복사해 붙여넣으세요."></textarea>
@@ -210,7 +507,16 @@
       <div class="btn-row">
         <button id="exportBtn" class="ghost">백업 JSON</button>
         <button id="importBtn" class="ghost">JSON 불러오기</button>
+        <button id="clearHistoryBtn" class="danger">기사 목록 삭제</button>
         <input id="importFile" type="file" accept="application/json" hidden />
+      </div>
+
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0;" />
+
+      <h2 id="completionHistoryTitle">완료 기록</h2>
+      <div id="completionHistoryList" class="history-list"></div>
+      <div class="btn-row">
+        <button id="clearCompletionHistoryBtn" class="ghost">완료 기록 삭제</button>
       </div>
     </aside>
 
@@ -234,17 +540,19 @@
         <div class="stat"><small id="errorLabel">오타</small><strong id="errorStat">0</strong></div>
       </div>
 
-      <div id="typingText" class="typing-box">
-        <div class="empty">왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.</div>
+      <div id="typingStage" class="typing-stage" tabindex="0">
+        <div id="typingText" class="typing-box">
+          <div class="empty">왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.</div>
+        </div>
+        <textarea id="typingInput" class="inline-input" disabled autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text"></textarea>
       </div>
 
-      <div class="input-area">
-        <textarea id="typingInput" placeholder="여기에 위 문장을 그대로 타이핑하세요." disabled></textarea>
-        <div class="btn-row">
+      <div class="practice-actions">
+        <div class="btn-row" style="margin-top:0;">
           <button id="startBtn">시작 / 이어하기</button>
           <button id="finishBtn" class="secondary">완료 처리</button>
         </div>
-        <p id="practiceHelp" class="help">첫 입력 시 시간이 측정됩니다. 새로고침해도 선택한 기사와 연습 위치는 유지됩니다.</p>
+        <p id="practiceHelp" class="help">본문 영역을 클릭한 뒤 바로 타이핑하세요. 줄바꿈과 특수문자는 자동으로 넘어가고, 띄어쓰기는 직접 입력합니다.</p>
       </div>
     </section>
   </main>
@@ -254,16 +562,19 @@
     const STATE_KEY = "personal_article_typing_state_v1";
     const THEME_KEY = "personal_article_typing_theme_v1";
     const LANGUAGE_KEY = "medical_healthcare_article_summary_language_v1";
+    const COMPLETION_HISTORY_KEY = "medical_healthcare_article_summary_completion_history_v1";
+    const FONT_KEY = "medical_healthcare_article_summary_font_v1";
 
     const i18n = {
       ko: {
         appTitle: "medical healthcare article summary",
         appSubtitle: "기사 URL을 관리하고, 본문은 직접 붙여넣어 브라우저에만 저장합니다.",
         languageBtn: "English",
+        fontSelectLabel: "서체",
         registerTitle: "기사 등록",
-        noticeText: "기사 본문은 자동 수집하지 않습니다. 원문에서 직접 복사한 텍스트를 개인 연습용으로 브라우저에만 저장합니다.<br />숫자와 주요 단위는 입력하지 않아도 자동으로 통과됩니다.",
+        noticeText: "기사 본문은 자동 수집하지 않습니다. 원문에서 직접 복사한 텍스트를 개인 연습용으로 브라우저에만 저장합니다.<br />숫자, 단위, 줄바꿈, 괄호·따옴표 등 특수문자는 입력하지 않아도 자동으로 통과됩니다. 띄어쓰기는 직접 입력합니다.",
         articleTitleLabel: "기사 제목",
-        articleTitlePlaceholder: "예: 신약 허가 관련 기사",
+        articleTitlePlaceholder: "선택 입력: 비워두면 URL 기준으로 자동 저장됩니다.",
         articleUrlLabel: "기사 URL",
         articleUrlPlaceholder: "https://www.monews.co.kr/...",
         articleBodyLabel: "본문 붙여넣기",
@@ -275,99 +586,117 @@
         searchPlaceholder: "제목 또는 URL 검색",
         exportBtn: "백업 JSON",
         importBtn: "JSON 불러오기",
-        selectArticle: "연습할 기사를 선택하세요",
-        emptyList: "저장한 기사가 없습니다.",
-        emptyPractice: "왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.",
-        openOriginal: "원문 열기",
+        clearHistoryBtn: "기사 목록 삭제",
+        clearHistoryConfirm: "저장한 기사 목록을 모두 삭제할까요?",
+        completionHistoryTitle: "완료 기록",
+        clearCompletionHistoryBtn: "완료 기록 삭제",
+        clearCompletionHistoryConfirm: "타이핑 완료 기록을 모두 삭제할까요?",
+        emptyCompletionHistory: "아직 완료 기록이 없습니다.",
         resetBtn: "연습 리셋",
-        darkMode: "블랙 모드",
-        lightMode: "라이트 모드",
+        themeDark: "블랙 모드",
+        themeLight: "라이트 모드",
         deleteBtn: "기사 삭제",
+        currentTitleEmpty: "연습할 기사를 선택하세요",
+        sourceOpen: "원문 열기",
         progressLabel: "진행률",
         accuracyLabel: "정확도",
         cpmLabel: "분당 타수",
         errorLabel: "오타",
-        typingPlaceholder: "여기에 위 문장을 그대로 타이핑하세요.",
+        emptyList: "저장한 기사가 없습니다.",
+        emptyPractice: "왼쪽에서 기사를 등록하거나 저장한 기사를 선택하면 연습을 시작할 수 있습니다.",
         startBtn: "시작 / 이어하기",
         finishBtn: "완료 처리",
-        practiceHelp: "첫 입력 시 시간이 측정됩니다. 새로고침해도 선택한 기사와 연습 위치는 유지됩니다.",
-        noUrl: "URL 없음",
+        practiceHelp: "본문 영역을 클릭한 뒤 바로 타이핑하세요. 줄바꿈과 특수문자는 자동으로 넘어가고, 띄어쓰기는 직접 입력합니다.",
         titleRequired: "기사 제목을 입력하세요.",
+        untitledArticle: "제목 없는 기사",
         bodyRequired: "연습할 본문을 붙여넣으세요.",
-        invalidUrl: "URL은 http:// 또는 https://로 시작해야 합니다.",
-        chooseArticle: "먼저 기사를 선택하세요.",
+        urlInvalid: "URL은 http:// 또는 https://로 시작해야 합니다.",
+        selectFirst: "먼저 기사를 선택하세요.",
         deleteConfirm: "선택한 기사를 삭제할까요?",
         importSuccess: "개 기사를 불러왔습니다.",
-        importError: "JSON 파일 형식을 확인하세요."
+        importInvalid: "JSON 파일 형식을 확인하세요.",
+        noUrl: "URL 없음"
       },
       en: {
         appTitle: "medical healthcare article summary",
-        appSubtitle: "Manage article URLs and paste article text manually. Everything stays in your browser.",
+        appSubtitle: "Manage article URLs and paste article text manually. Everything is stored only in your browser.",
         languageBtn: "한국어",
-        registerTitle: "Add Article",
-        noticeText: "This app does not automatically collect article content. Paste copied text manually for personal practice only.<br />Numbers and common units are skipped automatically while typing.",
-        articleTitleLabel: "Article Title",
-        articleTitlePlaceholder: "Example: New drug approval article",
+        fontSelectLabel: "Font",
+        registerTitle: "Register article",
+        noticeText: "This app does not crawl article text automatically. Paste only the text you want to practice, and it will be stored locally in your browser.<br />Numbers, common units, line breaks, punctuation, and special characters are skipped automatically. Spaces must be typed.",
+        articleTitleLabel: "Article title",
+        articleTitlePlaceholder: "Optional: if empty, it will be saved based on the URL.",
         articleUrlLabel: "Article URL",
         articleUrlPlaceholder: "https://www.monews.co.kr/...",
-        articleBodyLabel: "Paste Article Text",
-        articleBodyPlaceholder: "Paste only the paragraphs you want to practice typing.",
+        articleBodyLabel: "Paste article text",
+        articleBodyPlaceholder: "Copy and paste only the paragraphs you want to practice.",
         saveBtn: "Save",
-        clearFormBtn: "Clear Form",
+        clearFormBtn: "Clear form",
         storageHelp: "Saved data remains only in this browser's localStorage.",
-        savedTitle: "Saved Articles",
+        savedTitle: "Saved articles",
         searchPlaceholder: "Search title or URL",
         exportBtn: "Backup JSON",
         importBtn: "Import JSON",
-        selectArticle: "Select an article to practice",
-        emptyList: "No saved articles yet.",
-        emptyPractice: "Add an article on the left or select a saved article to start practicing.",
-        openOriginal: "Open original article",
-        resetBtn: "Reset Practice",
-        darkMode: "Dark Mode",
-        lightMode: "Light Mode",
-        deleteBtn: "Delete Article",
+        clearHistoryBtn: "Clear article list",
+        clearHistoryConfirm: "Delete all saved articles?",
+        completionHistoryTitle: "Completion history",
+        clearCompletionHistoryBtn: "Clear completion history",
+        clearCompletionHistoryConfirm: "Delete all completed typing records?",
+        emptyCompletionHistory: "No completion records yet.",
+        resetBtn: "Reset practice",
+        themeDark: "Dark mode",
+        themeLight: "Light mode",
+        deleteBtn: "Delete article",
+        currentTitleEmpty: "Select an article to practice",
+        sourceOpen: "Open original",
         progressLabel: "Progress",
         accuracyLabel: "Accuracy",
         cpmLabel: "CPM",
         errorLabel: "Errors",
-        typingPlaceholder: "Type the text above here.",
+        emptyList: "No saved articles.",
+        emptyPractice: "Register or select an article on the left to start practicing.",
         startBtn: "Start / Continue",
-        finishBtn: "Mark Complete",
-        practiceHelp: "Timing starts with your first input. Selected article and typing progress remain after refresh.",
-        noUrl: "No URL",
+        finishBtn: "Mark complete",
+        practiceHelp: "Click the text area and type directly over the article text. Line breaks, punctuation, and special characters are skipped automatically. Spaces must be typed.",
         titleRequired: "Please enter an article title.",
-        bodyRequired: "Please paste text to practice.",
-        invalidUrl: "URL must start with http:// or https://.",
-        chooseArticle: "Please select an article first.",
+        untitledArticle: "Untitled article",
+        bodyRequired: "Please paste the text for practice.",
+        urlInvalid: "URL must start with http:// or https://.",
+        selectFirst: "Please select an article first.",
         deleteConfirm: "Delete the selected article?",
-        importSuccess: " article(s) imported.",
-        importError: "Please check the JSON file format."
+        importSuccess: " articles imported.",
+        importInvalid: "Please check the JSON file format.",
+        noUrl: "No URL"
       }
     };
 
     let articles = loadArticles();
+    let completionHistory = loadCompletionHistory();
     let selectedId = loadState().selectedId || null;
     let startedAt = loadState().startedAt || null;
     let typedValue = loadState().typedValue || "";
     let practiceIndex = loadState().practiceIndex || 0;
     let currentTheme = localStorage.getItem(THEME_KEY) || "light";
     let currentLanguage = localStorage.getItem(LANGUAGE_KEY) || "ko";
+    let currentFont = localStorage.getItem(FONT_KEY) || "system";
+    let isComposing = false;
+    let composingPreview = "";
 
     const $ = (id) => document.getElementById(id);
-    const tr = (key) => i18n[currentLanguage][key] || i18n.ko[key] || key;
 
     const els = {
       appTitle: $("appTitle"),
       appSubtitle: $("appSubtitle"),
       language: $("languageBtn"),
+      fontSelectLabel: $("fontSelectLabel"),
+      fontSelect: $("fontSelect"),
       registerTitle: $("registerTitle"),
-      notice: $("noticeText"),
-      titleLabel: $("articleTitleLabel"),
-      urlLabel: $("articleUrlLabel"),
-      bodyLabel: $("articleBodyLabel"),
+      noticeText: $("noticeText"),
+      articleTitleLabel: $("articleTitleLabel"),
       title: $("articleTitle"),
+      articleUrlLabel: $("articleUrlLabel"),
       url: $("articleUrl"),
+      articleBodyLabel: $("articleBodyLabel"),
       body: $("articleBody"),
       save: $("saveBtn"),
       clearForm: $("clearFormBtn"),
@@ -377,6 +706,7 @@
       search: $("searchInput"),
       currentTitle: $("currentTitle"),
       currentUrl: $("currentUrl"),
+      typingStage: $("typingStage"),
       typingText: $("typingText"),
       typingInput: $("typingInput"),
       start: $("startBtn"),
@@ -388,23 +718,117 @@
       accuracyLabel: $("accuracyLabel"),
       cpmLabel: $("cpmLabel"),
       errorLabel: $("errorLabel"),
-      practiceHelp: $("practiceHelp"),
       progress: $("progressStat"),
       accuracy: $("accuracyStat"),
       cpm: $("cpmStat"),
       error: $("errorStat"),
       export: $("exportBtn"),
       import: $("importBtn"),
-      importFile: $("importFile")
+      clearHistory: $("clearHistoryBtn"),
+      completionHistoryTitle: $("completionHistoryTitle"),
+      completionHistoryList: $("completionHistoryList"),
+      clearCompletionHistory: $("clearCompletionHistoryBtn"),
+      importFile: $("importFile"),
+      practiceHelp: $("practiceHelp")
     };
 
+    function t(key) {
+      return i18n[currentLanguage][key] || i18n.ko[key] || key;
+    }
+
+    function getFontStack(fontKey) {
+      const fonts = {
+        system: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif',
+        noto: '"Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif',
+        pretendard: '"Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif',
+        serif: 'Georgia, "Times New Roman", "Noto Serif KR", serif',
+        mono: '"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace'
+      };
+      return fonts[fontKey] || fonts.system;
+    }
+
+    function applyFont() {
+      document.documentElement.style.setProperty("--app-font", getFontStack(currentFont));
+      els.fontSelect.value = currentFont;
+      localStorage.setItem(FONT_KEY, currentFont);
+    }
+
+    function changeFont() {
+      currentFont = els.fontSelect.value;
+      applyFont();
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = currentLanguage;
+      document.title = "medical healthcare article summary";
+      els.appTitle.textContent = t("appTitle");
+      els.appSubtitle.textContent = t("appSubtitle");
+      els.language.textContent = t("languageBtn");
+      els.fontSelectLabel.textContent = t("fontSelectLabel");
+      els.registerTitle.textContent = t("registerTitle");
+      els.noticeText.innerHTML = t("noticeText");
+      els.articleTitleLabel.textContent = t("articleTitleLabel");
+      els.title.placeholder = t("articleTitlePlaceholder");
+      els.articleUrlLabel.textContent = t("articleUrlLabel");
+      els.url.placeholder = t("articleUrlPlaceholder");
+      els.articleBodyLabel.textContent = t("articleBodyLabel");
+      els.body.placeholder = t("articleBodyPlaceholder");
+      els.save.textContent = t("saveBtn");
+      els.clearForm.textContent = t("clearFormBtn");
+      els.storageHelp.textContent = t("storageHelp");
+      els.savedTitle.textContent = t("savedTitle");
+      els.search.placeholder = t("searchPlaceholder");
+      els.export.textContent = t("exportBtn");
+      els.import.textContent = t("importBtn");
+      els.clearHistory.textContent = t("clearHistoryBtn");
+      els.completionHistoryTitle.textContent = t("completionHistoryTitle");
+      els.clearCompletionHistory.textContent = t("clearCompletionHistoryBtn");
+      els.reset.textContent = t("resetBtn");
+      els.delete.textContent = t("deleteBtn");
+      els.progressLabel.textContent = t("progressLabel");
+      els.accuracyLabel.textContent = t("accuracyLabel");
+      els.cpmLabel.textContent = t("cpmLabel");
+      els.errorLabel.textContent = t("errorLabel");
+      els.start.textContent = t("startBtn");
+      els.finish.textContent = t("finishBtn");
+      els.practiceHelp.textContent = t("practiceHelp");
+      localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+      applyTheme();
+      renderList();
+      renderCompletionHistory();
+      renderPractice();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === "ko" ? "en" : "ko";
+      applyLanguage();
+    }
+
     function loadArticles() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-      catch { return []; }
+      try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        return stored.map(item => ({
+          ...item,
+          title: item.title || "",
+          url: item.url || "",
+          body: normalizeText(item.body || "")
+        }));
+      } catch {
+        return [];
+      }
     }
 
     function saveArticles() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
+    }
+
+    function loadCompletionHistory() {
+      try { return JSON.parse(localStorage.getItem(COMPLETION_HISTORY_KEY)) || []; }
+      catch { return []; }
+    }
+
+    function saveCompletionHistory() {
+      localStorage.setItem(COMPLETION_HISTORY_KEY, JSON.stringify(completionHistory));
     }
 
     function loadState() {
@@ -418,7 +842,7 @@
 
     function applyTheme() {
       document.body.classList.toggle("dark", currentTheme === "dark");
-      els.theme.textContent = currentTheme === "dark" ? tr("lightMode") : tr("darkMode");
+      els.theme.textContent = currentTheme === "dark" ? t("themeLight") : t("themeDark");
       localStorage.setItem(THEME_KEY, currentTheme);
     }
 
@@ -427,50 +851,13 @@
       applyTheme();
     }
 
-    function applyLanguage() {
-      document.documentElement.lang = currentLanguage;
-      document.title = "medical healthcare article summary";
-      els.appTitle.textContent = tr("appTitle");
-      els.appSubtitle.textContent = tr("appSubtitle");
-      els.language.textContent = tr("languageBtn");
-      els.registerTitle.textContent = tr("registerTitle");
-      els.notice.innerHTML = tr("noticeText");
-      els.titleLabel.textContent = tr("articleTitleLabel");
-      els.urlLabel.textContent = tr("articleUrlLabel");
-      els.bodyLabel.textContent = tr("articleBodyLabel");
-      els.title.placeholder = tr("articleTitlePlaceholder");
-      els.url.placeholder = tr("articleUrlPlaceholder");
-      els.body.placeholder = tr("articleBodyPlaceholder");
-      els.save.textContent = tr("saveBtn");
-      els.clearForm.textContent = tr("clearFormBtn");
-      els.storageHelp.textContent = tr("storageHelp");
-      els.savedTitle.textContent = tr("savedTitle");
-      els.search.placeholder = tr("searchPlaceholder");
-      els.export.textContent = tr("exportBtn");
-      els.import.textContent = tr("importBtn");
-      els.reset.textContent = tr("resetBtn");
-      els.delete.textContent = tr("deleteBtn");
-      els.progressLabel.textContent = tr("progressLabel");
-      els.accuracyLabel.textContent = tr("accuracyLabel");
-      els.cpmLabel.textContent = tr("cpmLabel");
-      els.errorLabel.textContent = tr("errorLabel");
-      els.typingInput.placeholder = tr("typingPlaceholder");
-      els.start.textContent = tr("startBtn");
-      els.finish.textContent = tr("finishBtn");
-      els.practiceHelp.textContent = tr("practiceHelp");
-      localStorage.setItem(LANGUAGE_KEY, currentLanguage);
-      applyTheme();
-      renderList();
-      renderPractice();
-    }
-
-    function toggleLanguage() {
-      currentLanguage = currentLanguage === "ko" ? "en" : "ko";
-      applyLanguage();
-    }
-
     function normalizeText(text) {
-      return text.replace(/\r\n/g, "\n").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+      return String(text || "")
+        .replace(/\r\n?/g, "\n")
+        .replace(/[ \t\u00A0\u3000]*\n[ \t\u00A0\u3000]*/g, "\n")
+        .replace(/[ \t\u00A0\u3000]+/g, " ")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
     }
 
     function makeId() {
@@ -481,8 +868,32 @@
       return articles.find(article => article.id === selectedId) || null;
     }
 
+    function isLineBreakChar(char) {
+      return /[\n\r\u2028\u2029]/.test(char);
+    }
+
+    function isRequiredSpace(char) {
+      return char === " " || char === "\u00A0" || char === "\u3000";
+    }
+
     function isSkippableChar(char) {
-      return /[0-9０-９]/.test(char) || /[.,%％℃°㎎㎖㎍㎏㎜㎝㎡㎥]/.test(char);
+      if (!char) return false;
+      if (/[\n\r\t\v\f\u2028\u2029]/.test(char)) return true;
+      if (/[0-9０-９]/.test(char)) return true;
+      if (/[㎎㎖㎍㎏㎜㎝㎡㎥℃°％%]/.test(char)) return true;
+      if (isRequiredSpace(char)) return false;
+      return !/[\p{L}]/u.test(char);
+    }
+
+    function isAsciiEnglish(char) {
+      return /^[A-Za-z]$/.test(char);
+    }
+
+    function isCorrectChar(inputChar, targetChar) {
+      if (isAsciiEnglish(inputChar) && isAsciiEnglish(targetChar)) {
+        return inputChar.toLowerCase() === targetChar.toLowerCase();
+      }
+      return inputChar === targetChar;
     }
 
     function findNextTypableIndex(text, startIndex) {
@@ -492,39 +903,94 @@
       return i;
     }
 
+    function skippedSegmentBeforeIndex(text, index) {
+      const chars = Array.from(text);
+      let i = index - 1;
+      let segment = "";
+
+      while (i >= 0 && isSkippableChar(chars[i])) {
+        segment = chars[i] + segment;
+        i -= 1;
+      }
+
+      return segment;
+    }
+
+    function isAtParagraphBoundary(text, index) {
+      return isLineBreakChar(skippedSegmentBeforeIndex(text, index));
+    }
+
+    function shouldIgnoreNavigationKey(key) {
+      const article = getSelectedArticle();
+      if (!article) return false;
+      const chars = Array.from(article.body);
+      const target = chars[practiceIndex];
+
+      if (key === "Enter") return true;
+      if ((key === " " || key === "Spacebar") && target !== " " && isAtParagraphBoundary(article.body, practiceIndex)) return true;
+
+      return false;
+    }
+
+    function syncHiddenInputToCurrentDisplay(article) {
+      const displayValue = buildTypedDisplayValue(article.body, typedValue, practiceIndex);
+      els.typingInput.value = displayValue;
+      const len = displayValue.length;
+      try { els.typingInput.setSelectionRange(len, len); } catch {}
+    }
+
+
     function buildTypedDisplayValue(text, typed, nextIndex) {
       const chars = Array.from(text);
       const typedChars = Array.from(typed);
       const result = [];
       let typedCursor = 0;
+
       for (let i = 0; i < Math.min(nextIndex, chars.length); i++) {
         if (isSkippableChar(chars[i])) result.push(chars[i]);
         else result.push(typedChars[typedCursor++] || chars[i]);
       }
+
       return result.join("");
     }
 
     function convertRawInputToPractice(rawInput, text, previousTyped, previousIndex) {
       const chars = Array.from(text);
       const prevDisplay = buildTypedDisplayValue(text, previousTyped, previousIndex);
+
       if (rawInput.length < prevDisplay.length) {
         let targetIndex = previousIndex;
         while (targetIndex > 0 && isSkippableChar(chars[targetIndex - 1])) targetIndex -= 1;
         if (targetIndex > 0) targetIndex -= 1;
+
         const targetTypedLength = chars.slice(0, targetIndex).filter(char => !isSkippableChar(char)).length;
         const newTyped = Array.from(previousTyped).slice(0, Math.max(0, targetTypedLength)).join("");
         return { typed: newTyped, index: findNextTypableIndex(text, targetIndex) };
       }
+
       const added = Array.from(rawInput.slice(prevDisplay.length));
       let typedChars = Array.from(previousTyped);
       let index = previousIndex;
+
       added.forEach(char => {
         index = findNextTypableIndex(text, index);
         if (index >= chars.length) return;
+
+        const target = chars[index];
+
+        if ((char === "\n" || char === "\r") && target !== "\n" && target !== "\r") {
+          return;
+        }
+
+        if ((char === " " || char === "\u00A0" || char === "\u3000") && target !== " " && isAtParagraphBoundary(text, index)) {
+          return;
+        }
+
         typedChars.push(char);
         index += 1;
         index = findNextTypableIndex(text, index);
       });
+
       return { typed: typedChars.join(""), index };
     }
 
@@ -533,70 +999,157 @@
       const typedChars = Array.from(typedValue);
       let correct = 0;
       let errors = 0;
+
       typedChars.forEach((char, i) => {
-        if (char === targetChars[i]) correct += 1;
+        if (isCorrectChar(char, targetChars[i])) correct += 1;
         else errors += 1;
       });
+
       return { targetChars, typedChars, correct, errors };
+    }
+
+    function makeArticleTitle(title, url) {
+      const cleanTitle = title.trim();
+      if (cleanTitle) return cleanTitle;
+
+      if (url.trim()) {
+        try {
+          const parsed = new URL(url.trim());
+          return parsed.hostname.replace(/^www\./, "");
+        } catch {
+          return url.trim();
+        }
+      }
+
+      return t("untitledArticle");
+    }
+
+    function recordCompletion(article) {
+      const { targetChars, typedChars, correct, errors } = getPracticeStats(article);
+      const elapsedMinutes = startedAt ? Math.max((Date.now() - startedAt) / 60000, 1 / 60) : 0;
+      const cpm = elapsedMinutes ? Math.round(typedChars.length / elapsedMinutes) : 0;
+      const accuracy = typedChars.length ? Math.round((correct / typedChars.length) * 100) : 0;
+
+      const last = completionHistory[0];
+      const now = Date.now();
+      if (last && last.articleId === article.id && now - new Date(last.completedAt).getTime() < 3000) return;
+
+      completionHistory.unshift({
+        id: makeId(),
+        articleId: article.id,
+        title: article.title,
+        url: article.url,
+        completedAt: new Date().toISOString(),
+        accuracy,
+        cpm,
+        errors,
+        typedCount: typedChars.length,
+        totalCount: targetChars.length
+      });
+
+      completionHistory = completionHistory.slice(0, 100);
+      saveCompletionHistory();
+      renderCompletionHistory();
+    }
+
+    function renderCompletionHistory() {
+      if (!completionHistory.length) {
+        els.completionHistoryList.innerHTML = `<div class="empty">${t("emptyCompletionHistory")}</div>`;
+        return;
+      }
+
+      const locale = currentLanguage === "ko" ? "ko-KR" : "en-US";
+      els.completionHistoryList.innerHTML = completionHistory.map(item => `
+        <div class="history-item">
+          <div class="history-title">${escapeHtml(item.title || t("untitledArticle"))}</div>
+          <div class="history-meta">${new Date(item.completedAt).toLocaleString(locale)}</div>
+          <div class="history-meta">Accuracy ${item.accuracy}% · CPM ${item.cpm} · Errors ${item.errors}</div>
+        </div>
+      `).join("");
+    }
+
+    function clearCompletionHistory() {
+      if (completionHistory.length === 0) return;
+      if (!confirm(t("clearCompletionHistoryConfirm"))) return;
+      completionHistory = [];
+      saveCompletionHistory();
+      renderCompletionHistory();
     }
 
     function renderList() {
       const q = els.search.value.trim().toLowerCase();
-      const filtered = articles.filter(article => article.title.toLowerCase().includes(q) || article.url.toLowerCase().includes(q));
+      const filtered = articles.filter(article => {
+        return article.title.toLowerCase().includes(q) || article.url.toLowerCase().includes(q);
+      });
+
       if (filtered.length === 0) {
-        els.list.innerHTML = `<div class="empty">${tr("emptyList")}</div>`;
+        els.list.innerHTML = `<div class="empty">${t("emptyList")}</div>`;
         return;
       }
+
       els.list.innerHTML = filtered.map(article => `
         <div class="article-item ${article.id === selectedId ? "active" : ""}" data-id="${article.id}">
           <div class="article-title">${escapeHtml(article.title)}</div>
-          <div class="article-meta">${escapeHtml(article.url || tr("noUrl"))}</div>
+          <div class="article-meta">${escapeHtml(article.url || t("noUrl"))}</div>
           <div class="article-meta">${new Date(article.createdAt).toLocaleString(currentLanguage === "ko" ? "ko-KR" : "en-US")}</div>
         </div>
       `).join("");
-      document.querySelectorAll(".article-item").forEach(item => item.addEventListener("click", () => selectArticle(item.dataset.id)));
+
+      document.querySelectorAll(".article-item").forEach(item => {
+        item.addEventListener("click", () => selectArticle(item.dataset.id));
+      });
     }
 
     function renderPractice() {
       const article = getSelectedArticle();
+
       if (!article) {
-        els.currentTitle.textContent = tr("selectArticle");
+        els.currentTitle.textContent = t("currentTitleEmpty");
         els.currentUrl.innerHTML = "";
-        els.typingText.innerHTML = `<div class="empty">${tr("emptyPractice")}</div>`;
+        els.typingText.innerHTML = `<div class="empty">${t("emptyPractice")}</div>`;
         els.typingInput.value = "";
         els.typingInput.disabled = true;
+        els.typingStage.classList.remove("focused");
         updateStats();
         return;
       }
+
       practiceIndex = findNextTypableIndex(article.body, practiceIndex);
       els.currentTitle.textContent = article.title;
-      els.currentUrl.innerHTML = article.url ? `<a href="${escapeAttr(article.url)}" target="_blank" rel="noopener noreferrer">${tr("openOriginal")}</a>` : "";
+      els.currentUrl.innerHTML = article.url ? `<a href="${escapeAttr(article.url)}" target="_blank" rel="noopener noreferrer">${t("sourceOpen")}</a>` : "";
       els.typingInput.disabled = false;
       els.typingInput.value = buildTypedDisplayValue(article.body, typedValue, practiceIndex);
-      renderTypingText(article.body, typedValue, practiceIndex);
+      renderTypingText(article.body, typedValue, practiceIndex, composingPreview);
       updateStats();
     }
 
-    function renderTypingText(text, typed, nextIndex) {
+    function renderTypingText(text, typed, nextIndex, preview = "") {
       const chars = Array.from(text);
       const typedChars = Array.from(typed);
       let typedCursor = 0;
+
       els.typingText.innerHTML = chars.map((char, i) => {
         let cls = "char";
         let display = char;
+
         if (isSkippableChar(char)) {
           cls += " skipped";
           if (i < nextIndex) cls += " correct";
         } else if (i < nextIndex) {
           const inputChar = typedChars[typedCursor++];
-          cls += inputChar === char ? " correct" : " incorrect";
+          cls += isCorrectChar(inputChar, char) ? " correct" : " incorrect";
           if (inputChar) display = inputChar;
+        } else if (i === nextIndex && preview) {
+          display = preview;
+          cls += " composing";
         }
-        if (i === nextIndex) cls += " current";
+
+        if (i === nextIndex && !preview) cls += " current";
         const safeDisplay = display === "\n" ? "<br>" : escapeHtml(display);
         return `<span class="${cls}">${safeDisplay}</span>`;
       }).join("");
-      const current = els.typingText.querySelector(".current");
+
+      const current = els.typingText.querySelector(".current, .composing");
       if (current) current.scrollIntoView({ block: "center", inline: "nearest" });
     }
 
@@ -609,12 +1162,14 @@
         els.error.textContent = "0";
         return;
       }
+
       const { targetChars, typedChars, correct, errors } = getPracticeStats(article);
       const total = targetChars.length || 1;
       const progress = Math.min(100, Math.round((typedChars.length / total) * 100));
       const accuracy = typedChars.length ? Math.round((correct / typedChars.length) * 100) : 0;
       const elapsedMinutes = startedAt ? Math.max((Date.now() - startedAt) / 60000, 1 / 60) : 0;
       const cpm = elapsedMinutes ? Math.round(typedChars.length / elapsedMinutes) : 0;
+
       els.progress.textContent = `${progress}%`;
       els.accuracy.textContent = `${accuracy}%`;
       els.cpm.textContent = String(cpm);
@@ -625,6 +1180,7 @@
       selectedId = id;
       const article = getSelectedArticle();
       const savedState = loadState();
+
       if (savedState.selectedId === id) {
         typedValue = savedState.typedValue || "";
         practiceIndex = savedState.practiceIndex || 0;
@@ -633,32 +1189,44 @@
         typedValue = "";
         practiceIndex = 0;
         startedAt = null;
+        composingPreview = "";
       }
+
       if (article) practiceIndex = findNextTypableIndex(article.body, practiceIndex);
       saveState();
       renderList();
       renderPractice();
-      if (article) els.typingInput.focus();
+      focusTyping();
     }
 
     function saveArticleFromForm() {
-      const title = els.title.value.trim();
       const url = els.url.value.trim();
+      const title = makeArticleTitle(els.title.value, url);
       const body = normalizeText(els.body.value);
-      if (!title) return alert(tr("titleRequired"));
-      if (!body) return alert(tr("bodyRequired"));
-      if (url && !/^https?:\/\//i.test(url)) return alert(tr("invalidUrl"));
-      const article = { id: makeId(), title, url, body, createdAt: new Date().toISOString() };
+
+      if (!body) return alert(t("bodyRequired"));
+      if (url && !/^https?:\/\//i.test(url)) return alert(t("urlInvalid"));
+
+      const article = {
+        id: makeId(),
+        title,
+        url,
+        body,
+        createdAt: new Date().toISOString()
+      };
+
       articles.unshift(article);
       selectedId = article.id;
       typedValue = "";
       practiceIndex = 0;
       startedAt = null;
+      composingPreview = "";
       saveArticles();
       saveState();
       clearForm();
       renderList();
       renderPractice();
+      focusTyping();
     }
 
     function clearForm() {
@@ -671,44 +1239,70 @@
       typedValue = "";
       practiceIndex = 0;
       startedAt = null;
+      composingPreview = "";
       const article = getSelectedArticle();
       if (article) practiceIndex = findNextTypableIndex(article.body, 0);
       saveState();
       renderPractice();
-      els.typingInput.focus();
+      focusTyping();
     }
 
     function deleteSelectedArticle() {
       const article = getSelectedArticle();
       if (!article) return;
-      if (!confirm(tr("deleteConfirm"))) return;
+      if (!confirm(t("deleteConfirm"))) return;
+
       articles = articles.filter(item => item.id !== selectedId);
       selectedId = articles[0]?.id || null;
       typedValue = "";
       practiceIndex = 0;
       startedAt = null;
+      composingPreview = "";
       saveArticles();
       saveState();
       renderList();
       renderPractice();
     }
 
+    function clearArticleHistory() {
+      if (articles.length === 0) return;
+      if (!confirm(t("clearHistoryConfirm"))) return;
+
+      articles = [];
+      selectedId = null;
+      typedValue = "";
+      practiceIndex = 0;
+      startedAt = null;
+      composingPreview = "";
+      saveArticles();
+      saveState();
+      renderList();
+      renderPractice();
+    }
+
+
     function finishPractice() {
       const article = getSelectedArticle();
       if (!article) return;
       typedValue = Array.from(article.body).filter(char => !isSkippableChar(char)).join("");
       practiceIndex = Array.from(article.body).length;
+      composingPreview = "";
       saveState();
       renderPractice();
+      recordCompletion(article);
+      focusTyping();
     }
 
     function exportData() {
-      const data = { exportedAt: new Date().toISOString(), articles };
+      const data = {
+        exportedAt: new Date().toISOString(),
+        articles
+      };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "medical-healthcare-article-summary-backup.json";
+      a.download = "typing-practice-backup.json";
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -720,26 +1314,45 @@
           const data = JSON.parse(reader.result);
           const imported = Array.isArray(data) ? data : data.articles;
           if (!Array.isArray(imported)) throw new Error("Invalid format");
-          const cleaned = imported.filter(item => item.title && item.body).map(item => ({
-            id: item.id || makeId(),
-            title: String(item.title),
-            url: String(item.url || ""),
-            body: normalizeText(String(item.body)),
-            createdAt: item.createdAt || new Date().toISOString()
-          }));
+
+          const cleaned = imported
+            .filter(item => item.title && item.body)
+            .map(item => ({
+              id: item.id || makeId(),
+              title: String(item.title),
+              url: String(item.url || ""),
+              body: normalizeText(String(item.body)),
+              createdAt: item.createdAt || new Date().toISOString()
+            }));
+
           articles = [...cleaned, ...articles];
           saveArticles();
           renderList();
-          alert(currentLanguage === "ko" ? `${cleaned.length}${tr("importSuccess")}` : `${cleaned.length}${tr("importSuccess")}`);
+          alert(currentLanguage === "ko" ? `${cleaned.length}${t("importSuccess")}` : `${cleaned.length}${t("importSuccess")}`);
         } catch {
-          alert(tr("importError"));
+          alert(t("importInvalid"));
         }
       };
       reader.readAsText(file);
     }
 
+    function focusTyping() {
+      const article = getSelectedArticle();
+      if (!article) return;
+      els.typingInput.disabled = false;
+      els.typingInput.focus();
+      const len = els.typingInput.value.length;
+      try { els.typingInput.setSelectionRange(len, len); } catch {}
+      els.typingStage.classList.add("focused");
+    }
+
     function escapeHtml(value) {
-      return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
     function escapeAttr(value) {
@@ -750,32 +1363,114 @@
     els.clearForm.addEventListener("click", clearForm);
     els.search.addEventListener("input", renderList);
     els.language.addEventListener("click", toggleLanguage);
+    els.fontSelect.addEventListener("change", changeFont);
+    els.theme.addEventListener("click", toggleTheme);
 
-    els.typingInput.addEventListener("input", () => {
+    els.typingStage.addEventListener("click", focusTyping);
+    els.typingInput.addEventListener("focus", () => els.typingStage.classList.add("focused"));
+    els.typingInput.addEventListener("blur", () => els.typingStage.classList.remove("focused"));
+
+    function handleTypingInput() {
       const article = getSelectedArticle();
       if (!article) return;
       if (!startedAt && els.typingInput.value.length > 0) startedAt = Date.now();
+
       const next = convertRawInputToPractice(els.typingInput.value, article.body, typedValue, practiceIndex);
       typedValue = next.typed;
       practiceIndex = next.index;
+      composingPreview = "";
+
       const displayValue = buildTypedDisplayValue(article.body, typedValue, practiceIndex);
-      if (els.typingInput.value !== displayValue) els.typingInput.value = displayValue;
-      renderTypingText(article.body, typedValue, practiceIndex);
+      if (els.typingInput.value !== displayValue) {
+        els.typingInput.value = displayValue;
+        const len = displayValue.length;
+        try { els.typingInput.setSelectionRange(len, len); } catch {}
+      }
+
+      renderTypingText(article.body, typedValue, practiceIndex, composingPreview);
       updateStats();
       saveState();
+
+      const stats = getPracticeStats(article);
+      if (stats.typedChars.length >= stats.targetChars.length && stats.targetChars.length > 0) {
+        recordCompletion(article);
+      }
+    }
+
+    els.typingInput.addEventListener("compositionstart", () => {
+      isComposing = true;
+      composingPreview = "";
+    });
+
+    els.typingInput.addEventListener("compositionupdate", (event) => {
+      const article = getSelectedArticle();
+      if (!article) return;
+      composingPreview = event.data || "";
+      renderTypingText(article.body, typedValue, practiceIndex, composingPreview);
+    });
+
+    els.typingInput.addEventListener("compositionend", (event) => {
+      isComposing = false;
+      composingPreview = event.data || "";
+      handleTypingInput();
+    });
+
+    els.typingInput.addEventListener("keydown", (event) => {
+      if (isComposing) return;
+      if (shouldIgnoreNavigationKey(event.key)) {
+        event.preventDefault();
+        const article = getSelectedArticle();
+        if (article) {
+          practiceIndex = findNextTypableIndex(article.body, practiceIndex);
+          syncHiddenInputToCurrentDisplay(article);
+          renderTypingText(article.body, typedValue, practiceIndex, composingPreview);
+          saveState();
+        }
+      }
+    });
+
+    els.typingInput.addEventListener("beforeinput", (event) => {
+      if (isComposing) return;
+      const article = getSelectedArticle();
+      if (!article) return;
+
+      const inputType = event.inputType || "";
+      const data = event.data || "";
+
+      if (inputType === "insertParagraph" || inputType === "insertLineBreak") {
+        event.preventDefault();
+        practiceIndex = findNextTypableIndex(article.body, practiceIndex);
+        syncHiddenInputToCurrentDisplay(article);
+        renderTypingText(article.body, typedValue, practiceIndex, composingPreview);
+        saveState();
+        return;
+      }
+
+      if ((data === " " || data === "\u00A0" || data === "\u3000") && shouldIgnoreNavigationKey(" ")) {
+        event.preventDefault();
+        practiceIndex = findNextTypableIndex(article.body, practiceIndex);
+        syncHiddenInputToCurrentDisplay(article);
+        renderTypingText(article.body, typedValue, practiceIndex, composingPreview);
+        saveState();
+      }
+    });
+
+    els.typingInput.addEventListener("input", () => {
+      if (isComposing) return;
+      handleTypingInput();
     });
 
     els.start.addEventListener("click", () => {
-      if (!getSelectedArticle()) return alert(tr("chooseArticle"));
-      els.typingInput.disabled = false;
-      els.typingInput.focus();
+      if (!getSelectedArticle()) return alert(t("selectFirst"));
+      focusTyping();
     });
 
     els.reset.addEventListener("click", resetPractice);
     els.delete.addEventListener("click", deleteSelectedArticle);
     els.finish.addEventListener("click", finishPractice);
-    els.theme.addEventListener("click", toggleTheme);
     els.export.addEventListener("click", exportData);
+    els.clearHistory.addEventListener("click", clearArticleHistory);
+    els.clearCompletionHistory.addEventListener("click", clearCompletionHistory);
     els.import.addEventListener("click", () => els.importFile.click());
     els.importFile.addEventListener("change", (e) => {
       const file = e.target.files[0];
@@ -783,10 +1478,13 @@
       e.target.value = "";
     });
 
+    applyFont();
     applyLanguage();
     const initialArticle = getSelectedArticle();
     if (initialArticle) practiceIndex = findNextTypableIndex(initialArticle.body, practiceIndex);
+    saveArticles();
     renderList();
+    renderCompletionHistory();
     renderPractice();
   </script>
 </body>
