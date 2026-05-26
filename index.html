@@ -1150,7 +1150,20 @@
       }).join("");
 
       const current = els.typingText.querySelector(".current, .composing");
-      if (current) current.scrollIntoView({ block: "center", inline: "nearest" });
+      if (current) keepCurrentCharVisible(current);
+    }
+
+    function keepCurrentCharVisible(current) {
+      const container = els.typingText;
+      const currentRect = current.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const buffer = 56;
+
+      if (currentRect.top < containerRect.top + buffer) {
+        container.scrollTop -= (containerRect.top + buffer) - currentRect.top;
+      } else if (currentRect.bottom > containerRect.bottom - buffer) {
+        container.scrollTop += currentRect.bottom - (containerRect.bottom - buffer);
+      }
     }
 
     function updateStats() {
@@ -1340,7 +1353,7 @@
       const article = getSelectedArticle();
       if (!article) return;
       els.typingInput.disabled = false;
-      els.typingInput.focus();
+      els.typingInput.focus({ preventScroll: true });
       const len = els.typingInput.value.length;
       try { els.typingInput.setSelectionRange(len, len); } catch {}
       els.typingStage.classList.add("focused");
